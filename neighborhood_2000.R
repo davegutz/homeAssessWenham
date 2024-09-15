@@ -51,7 +51,7 @@ summary(glm_Ra)
 plot(allEffects(glm_Ra))
 
 new_fa = data.frame(Fin.area = c(0, 5000))
-new_Ra = predict(lm_faRa, new_fa$Fin.area, type = "response")
+new_Ra = predict(lm_faRa, new_fa, type = "response")
 
 ######### Cape
 lm_faCp <- lm(Total.Value ~ Fin.area, data = Cp)
