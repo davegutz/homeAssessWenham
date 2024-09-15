@@ -13,8 +13,6 @@ library(zoo) # rollmean
 
 # Import Data
 D <- read.csv("all2000_20230127.csv")
-
-# drop na data
 D$Total.Value <- as.numeric(gsub("[$,]", "", D$Total.Value))
 D <- D[!is.na(D$Fin.area), ]
 D <- D[!is.na(D$Total.Value), ]
@@ -25,11 +23,12 @@ Cp <- D[D$Type=='CAPE', ]
 Co <- D[D$Type=='COLONIAL', ]
 Sl <- D[D$Type=='SPLIT LEVL', ]
 
-#ggplot(data=D, aes(x=Fin.area, y = value, group = measure, color = measure)) +
-#  geom_line()
-
-smoothScatter(D$Total.Value ~ D$Fin.area, xlim(0, 5000) )
 plot(Total.Value ~ Fin.area, data=D)
+plot(Total.Value ~ Lot.size, data=D)
+plot(Total.Value ~ Fin.area, data=Ra)
+plot(Total.Value ~ Lot.size, data=Ra)
+
+
 
 #format variables #####
 
