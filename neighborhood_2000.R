@@ -13,9 +13,11 @@ library(zoo) # rollmean
 
 # Import Data
 D <- read.csv("all2000_20230127.csv")
-#D <- read_excel("migraine_diary.xlsx", sheet = "Migraine")
-head(D)
-str(D)
+
+# drop na data
+D$Total.Value <- as.numeric(gsub("[$,]", "", D$Total.Value))
+D <- D[!is.na(D$Fin.area), ]
+D <- D[!is.na(D$Total.Value), ]
 
 # Separate types
 Ra <- D[D$Type=='RANCH', ]
@@ -23,106 +25,14 @@ Cp <- D[D$Type=='CAPE', ]
 Co <- D[D$Type=='COLONIAL', ]
 Sl <- D[D$Type=='SPLIT LEVL', ]
 
+#ggplot(data=D, aes(x=Fin.area, y = value, group = measure, color = measure)) +
+#  geom_line()
+
+smoothScatter(D$Total.Value ~ D$Fin.area, xlim(0, 5000) )
+plot(Total.Value ~ Fin.area, data=D)
+
 #format variables #####
 
-D$migraine <- as.factor(ifelse(is.na(D$migraine), FALSE, TRUE)) # set migraine to boolean. if blank FALSE, else TRUE (migraine present)
-D$time_asleep <- hour(D$time_asleep)*60 + minute(D$time_asleep)
-
-D$severity <- ifelse(is.na(D$severity), 0, D$severity)
-
-D$scent <- ifelse(is.na(D$scent), FALSE, TRUE)
-D$num_pillsMorning
-D$num_vitamins
-D$period <- ifelse(is.na(D$period), FALSE, TRUE)
-D$menstrual_phase <- factor(D$menstrual_phase, levels = c("menses", "week 1", "week 2", "week 3", "week 4", "week 5"))
-
-# make column of Date as number of days elapsed since start (to make numeric)
-firstDate <- D$Date[1]
-D$dateNum = as.numeric(difftime(D$Date, firstDate, units = "days")) 
-
-# drop data that doesn't have date
-D <- D[!is.na(D$Date), ]
-
-# make rolling average of values
-# avg over past 2 days
-D$nickelAvg2 <- c(NA, rollmean(D$nickel, 2, na.pad = FALSE, align = c("right")))
-D$timeAsleepAvg2 <- c(NA, rollmean(D$time_asleep, 2, na.pad = FALSE, align = c("right")))
-D$totalScreenAvg2 <- c(NA, rollmean(D$total_screen, 2, na.pad = FALSE, align = c("right")))
-D$fiberAvg2 <- c(NA, rollmean(D$fiber, 2, na.pad = FALSE, align = c("right")))
-D$tyramineAvg2 <- c(NA, rollmean(D$Tyramine, 2, na.pad = FALSE, align = c("right")))
-D$histamineAvg2 <- c(NA, rollmean(D$Histamine, 2, na.pad = FALSE, align = c("right")))
-D$histamineSIGHIAvg2 <- c(NA, rollmean(D$Histamine_SIGHI, 2, na.pad = FALSE, align = c("right")))
-
-# avg over past 3 days
-D$nickelAvg3 <- c(NA, NA, rollmean(D$nickel, 3, na.pad = FALSE, align = c("right")))
-D$timeAsleepAvg3 <- c(NA, NA, rollmean(D$time_asleep, 3, na.pad = FALSE, align = c("right")))
-D$totalScreenAvg3 <- c(NA, NA, rollmean(D$total_screen, 3, na.pad = FALSE, align = c("right")))
-D$fiberAvg3 <- c(NA, NA, rollmean(D$fiber, 3, na.pad = FALSE, align = c("right")))
-D$tyramineAvg3 <- c(NA, NA, rollmean(D$Tyramine, 3, na.pad = FALSE, align = c("right")))
-D$histamineAvg3 <- c(NA, NA, rollmean(D$Histamine, 3, na.pad = FALSE, align = c("right")))
-D$histamineSIGHIAvg3 <- c(NA, NA, rollmean(D$Histamine_SIGHI, 3, na.pad = FALSE, align = c("right")))
-
-
-
-
-# lag
-# 1) make lag
-# screen time lad
-D$screenlag1 <- lag(D$total_screen, n = 1L)
-D$screenlag2 <- lag(D$total_screen, n = 2L)
-D$screenlag3 <- lag(D$total_screen, n = 3L)
-D$screenlag4 <- lag(D$total_screen, n = 4L)
-D$screenlag5 <- lag(D$total_screen, n = 5L)
-
-# NICKEL Lag
-D$nickellag1 <- lag(D$nickel, n = 1L)
-D$nickellag2 <- lag(D$nickel, n = 2L)
-D$nickellag3 <- lag(D$nickel, n = 3L)
-D$nickellag4 <- lag(D$nickel, n = 4L)
-D$nickellag5 <- lag(D$nickel, n = 5L)
-
-# FIBER Lag
-D$fiberlag1 <- lag(D$fiber, n = 1L)
-D$fiberlag2 <- lag(D$fiber, n = 2L)
-D$fiberlag3 <- lag(D$fiber, n = 3L)
-D$fiberlag4 <- lag(D$fiber, n = 4L)
-D$fiberlag5 <- lag(D$fiber, n = 5L)
-
-# TYRAMINE Lag
-D$tyraminelag1 <- lag(D$Tyramine, n = 1L)
-D$tyraminelag2 <- lag(D$Tyramine, n = 2L)
-D$tyraminelag3 <- lag(D$Tyramine, n = 3L)
-D$tyraminelag4 <- lag(D$Tyramine, n = 4L)
-D$tyraminelag5 <- lag(D$Tyramine, n = 5L)
-
-# Histamine Lag
-D$histaminelag1 <- lag(D$Histamine, n = 1L)
-D$histaminelag2 <- lag(D$Histamine, n = 2L)
-D$histaminelag3 <- lag(D$Histamine, n = 3L)
-D$histaminelag4 <- lag(D$Histamine, n = 4L)
-D$histaminelag5 <- lag(D$Histamine, n = 5L)
-
-
-# Histamine Lag SIGHI
-D$histamineSIGHIlag1 <- lag(D$Histamine_SIGHI, n = 1L)
-D$histamineSIGHIlag2 <- lag(D$Histamine_SIGHI, n = 2L)
-D$histamineSIGHIlag3 <- lag(D$Histamine_SIGHI, n = 3L)
-D$histamineSIGHIlag4 <- lag(D$Histamine_SIGHI, n = 4L)
-D$histamineSIGHIlag5 <- lag(D$Histamine_SIGHI, n = 5L)
-
-# PressureChange Lag (minMinusMax from day before)
-D$pressure_minMinusMaxYesterday_lag1 <- lag(D$pressure_minMinusMaxYesterday, n = 1L)
-D$pressure_minMinusMaxYesterday_lag2 <- lag(D$pressure_minMinusMaxYesterday, n = 2L)
-D$pressure_minMinusMaxYesterday_lag3 <- lag(D$pressure_minMinusMaxYesterday, n = 3L)
-D$pressure_minMinusMaxYesterday_lag4 <- lag(D$pressure_minMinusMaxYesterday, n = 4L)
-D$pressure_minMinusMaxYesterday_lag5 <- lag(D$pressure_minMinusMaxYesterday, n = 5L)
-
-# PressureChange Lag (avg change)
-D$pressure_avg_changefromdaybefore_lag1 <- lag(D$pressure_avg_changefromdaybefore, n = 1L)
-D$pressure_avg_changefromdaybefore_lag2 <- lag(D$pressure_avg_changefromdaybefore, n = 2L)
-D$pressure_avg_changefromdaybefore_lag3 <- lag(D$pressure_avg_changefromdaybefore, n = 3L)
-D$pressure_avg_changefromdaybefore_lag4 <- lag(D$pressure_avg_changefromdaybefore, n = 4L)
-D$pressure_avg_changefromdaybefore_lag5 <- lag(D$pressure_avg_changefromdaybefore, n = 5L)
 
 
 # make long data and plot #####
