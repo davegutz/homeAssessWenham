@@ -30,44 +30,49 @@ plot(Total.Value ~ Fin.area, data=Ra)
 plot(Total.Value ~ Lot.size, data=Ra)
 
 ######### All
-lm_faD <- lm(Total.Value ~ Fin.area, data = D)
+lm_faD <- lm(Total.Value ~ Fin.area, data=D)
 summary(lm_faD)
 plot(allEffects(lm_faD))
 
-glm_faD <- glm(Total.Value ~ Fin.area + Lot.size, family = gaussian, data = D)
+glm_faD <- glm(Total.Value ~ Fin.area + Lot.size, family=gaussian, data=D)
 summary(glm_faD)
 plot(allEffects(glm_faD))
 
-#newdata = data.frame(nickel = c(80, 90, 99, 100, 101, 110))
-#predict(glm_nickel, newdata, type = "response") # odds of getting migraine given levels of nickel intake (ug)
+#newdata=data.frame(nickel=c(80, 90, 99, 100, 101, 110))
+#predict(glm_nickel, newdata, type="response") # odds of getting migraine given levels of nickel intake (ug)
 
 ######### Ranch
-lm_faRa <- lm(Total.Value ~ Fin.area, data = Ra)
+lm_faRa <- lm(Total.Value ~ Fin.area, data=Ra)
 summary(lm_faRa)
 plot(allEffects(lm_faRa))
 
-glm_Ra <- glm(Total.Value ~ Fin.area + Lot.size, family = gaussian, data = Ra)
+plot(Total.Value ~ Fin.area, data=Ra)
+abline(lm_faRa)
+
+
+glm_Ra <- glm(Total.Value ~ Fin.area + Lot.size, family=gaussian, data=Ra)
 summary(glm_Ra)
 plot(allEffects(glm_Ra))
 
-new_fa = data.frame(Fin.area = c(0, 5000))
-new_Ra = predict(lm_faRa, new_fa, type = "response")
+new_fa=data.frame(Fin.area=c(0, 5000))
+new_Ra=predict(lm_faRa, new_fa, type="response")
 
 ######### Cape
-lm_faCp <- lm(Total.Value ~ Fin.area, data = Cp)
+lm_faCp <- lm(Total.Value ~ Fin.area, data=Cp)
 summary(lm_faCp)
 plot(allEffects(lm_faCp))
 
-glm_Cp <- glm(Total.Value ~ Fin.area + Lot.size, family = gaussian, data = Cp)
+glm_Cp <- glm(Total.Value ~ Fin.area + Lot.size, family=gaussian, data=Cp)
 summary(glm_Cp)
 plot(allEffects(glm_Cp))
 
 #############Summarize
 
 # Create an empty plot
-plot(Ra$Fin.area, Ra$Total.Value, type = "n", xlim = c(0, 10000), ylim = c(0, 2000000), 
-     xlab = "Finished Area, sqft", ylab = "Total Assesed Value, $", main = "Wenham Neighborhood 2000")
-lines(Ra$Fin.area, Ra$Total.Value, type = "p", pch = 1, col = "red")
-lines(new_fa, new_Ra, type = 'l', col="red")
-lines(Cp$Fin.area, Cp$Total.Value, type = "p", pch = 2, col = "blue")
-legend("topleft", legend = c("Ranches", "Capes"), col = c("red", "blue"), lty = 1)
+plot(Ra$Fin.area, Ra$Total.Value, type="n", xlim=c(0, 10000), ylim=c(0, 2000000), 
+     xlab="Finished Area, sqft", ylab="Total Assesed Value, $", main="Wenham Neighborhood 2000")
+lines(Ra$Fin.area, Ra$Total.Value, type="p", pch=1, col="red")
+abline(lm_faRa, col="red")
+lines(Cp$Fin.area, Cp$Total.Value, type="p", pch=2, col="blue")
+abline(lm_faCp, col="blue")
+legend("topleft", legend=c("Ranches", "Capes"), col=c("red", "blue"), lty=1)
