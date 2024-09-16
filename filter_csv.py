@@ -36,11 +36,48 @@ if sys.platform == 'darwin':
 plt.rcParams.update({'figure.max_open_warning': 0})
 
 
-def write_clean_file(path_to_data=None, working_file=None, hdr_key=None):
+def write_clean_file(path_to_data=None, hdr_key=None, path_to_aux=None, auxhdr_key=None, addr_key=None):
     """First line with hdr_key defines the number of fields to be imported cleanly"""
     import os
-    (path, basename) = os.path.split(path_to_data)
-    csv_file = working_file
+    (path, basefile) = os.path.split(path_to_data)
+    basename = basefile.split('.')[0]
+    csv_file = basename + '_clean.csv'
+    csv_auxfile = basename + '_aux.csv'
+
+    # aux file Header
+    have_header_str = None
+    num_fields = 0
+    with open(path_to_aux, "r", encoding='cp437') as input_file:
+        with open(csv_auxfile, "w") as output:
+            try:
+                for line in input_file:
+                    if line.__contains__(auxhdr_key):
+                        if have_header_str is None:
+                            have_header_str = True  # write one title only
+                            output.write(line)
+                            num_fields = line.count(';')  # first line with hdr_key defines number of fields
+            except IOError:
+                print("filter_csv.py:", line)  # last line
+
+    # aux file
+    num_lines = 0
+    num_skips = 0
+    with (open(path_to_aux, "r", encoding='cp437') as input_file):  # reads all characters even bad ones
+        with open(csv_auxfile, "a") as output:
+            for line in input_file:
+                if line.__contains__(addr_key):
+                    if line.count(";") == num_fields and \
+                            re.search(r'[^a-zA-Z0-9+-_.:, ]', line[:-1]) is None:
+                        output.write(line)
+                        num_lines += 1
+                    else:
+                        print('discarding: ', line)
+                        num_skips += 1
+        if not num_lines:
+            print("I(write_clean_file): no data to write")
+        else:
+            print("Wrote(write_clean_auxfile):", csv_auxfile, num_lines, "lines")
+
 
     # Header
     have_header_str = None
@@ -72,11 +109,9 @@ def write_clean_file(path_to_data=None, working_file=None, hdr_key=None):
                             re.search(r'[^a-zA-Z0-9+-_.:, ]', line[:-1]) is None:
                         output.write(line)
                         num_lines += 1
-
                     else:
                         print('discarding: ', line)
                         num_skips += 1
-                    num_lines_in += 1
     if not num_lines:
         csv_file = None
         print("I(write_clean_file): no data to write")
@@ -84,14 +119,16 @@ def write_clean_file(path_to_data=None, working_file=None, hdr_key=None):
             print("W(write_clean_file):  unit_key not found in ", basename, ".  Looking with '{:s}'".format(unit_key))
     else:
         print("Wrote(write_clean_file):", csv_file, num_lines, "lines", num_skips, "skips", length, "fields")
-    return csv_file
+    return csv_file, csv_auxfile
 
 
 def main():
     data_file = './FY24FORDAVIDGUTZ.csv'
-    working_file = './working_file.csv'
-    write_clean_file(path_to_data=data_file, working_file=working_file, hdr_key='Wenham')
-
+    aux_file = './FY24REPORTFORDAVIDGUTZ.csv'
+    data_file_clean, data_auxfile_clean = write_clean_file(path_to_data=data_file, hdr_key='Wenham',
+                                                           path_to_aux=aux_file, auxhdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
+    # blob = np.genfromtxt(data_file_clean, delimiter=',', names=True).view(np.recarray)
+    blob_aux = np.genfromtxt(data_auxfile_clean, delimiter=';', names=True).view(np.recarray)
 
 # import cProfile
 # if __name__ == '__main__':
