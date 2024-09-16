@@ -34,7 +34,7 @@ lm_faD <- lm(Total.Value ~ Fin.area, data = D)
 summary(lm_faD)
 plot(allEffects(lm_faD))
 
-glm_Ra <- glm(Total.Value ~ Fin.area + Lot.size, family = gaussian, data = D)
+glm_faD <- glm(Total.Value ~ Fin.area + Lot.size, family = gaussian, data = D)
 summary(glm_faD)
 plot(allEffects(glm_faD))
 
@@ -61,6 +61,8 @@ plot(allEffects(lm_faCp))
 glm_Cp <- glm(Total.Value ~ Fin.area + Lot.size, family = gaussian, data = Cp)
 summary(glm_Cp)
 plot(allEffects(glm_Cp))
+
+#############Summarize
 
 # Create an empty plot
 plot(Ra$Fin.area, Ra$Total.Value, type = "n", xlim = c(0, 10000), ylim = c(0, 2000000), 
