@@ -66,13 +66,35 @@ glm_Cp <- glm(Total.Value ~ Fin.area + Lot.size + Beds + Baths, family=gaussian,
 summary(glm_Cp)
 plot(allEffects(glm_Cp))
 
+######### Colonial
+lm_faCo <- lm(Total.Value ~ Fin.area, data=Co)
+summary(lm_faCo)
+plot(allEffects(lm_faCo))
+
+glm_Co <- glm(Total.Value ~ Fin.area + Lot.size + Beds + Baths, family=gaussian, data=Co)
+summary(glm_Co)
+plot(allEffects(glm_Co))
+
+######### Split Level
+lm_faSl <- lm(Total.Value ~ Fin.area, data=Sl)
+summary(lm_faSl)
+plot(allEffects(lm_faSl))
+
+glm_Sl <- glm(Total.Value ~ Fin.area + Lot.size + Beds + Baths, family=gaussian, data=Sl)
+summary(glm_Sl)
+plot(allEffects(glm_Sl))
+
 #############Summarize
 
 # Create an empty plot
-plot(Ra$Fin.area, Ra$Total.Value, type="n", xlim=c(0, 10000), ylim=c(0, 2000000), 
+plot(Ra$Fin.area, Ra$Total.Value, type="n", xlim=c(500, 5500), ylim=c(200000, 1200000), 
      xlab="Finished Area, sqft", ylab="Total Assesed Value, $", main="Wenham Neighborhood 2000")
 lines(Ra$Fin.area, Ra$Total.Value, type="p", pch=1, col="red")
 abline(lm_faRa, col="red")
 lines(Cp$Fin.area, Cp$Total.Value, type="p", pch=2, col="blue")
 abline(lm_faCp, col="blue")
-legend("topleft", legend=c("Ranches", "Capes"), col=c("red", "blue"), lty=1)
+lines(Co$Fin.area, Co$Total.Value, type="p", pch=3, col="green")
+abline(lm_faCo, col="green")
+lines(Sl$Fin.area, Sl$Total.Value, type="p", pch="S", col="black")
+abline(lm_faSl, col="black")
+legend("topleft", legend=c("Ranche", "Cape", "Colonial", "Split Level"), col=c("red", "blue", "green", "black"), lty=1)
