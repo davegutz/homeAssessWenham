@@ -34,7 +34,7 @@ lm_faD <- lm(Total.Value ~ Fin.area, data=D)
 summary(lm_faD)
 plot(allEffects(lm_faD))
 
-glm_faD <- glm(Total.Value ~ Fin.area + Lot.size, family=gaussian, data=D)
+glm_faD <- glm(Total.Value ~ Fin.area + Lot.size + Beds + Baths + Type, family=gaussian, data=D)
 summary(glm_faD)
 plot(allEffects(glm_faD))
 
@@ -50,7 +50,7 @@ plot(Total.Value ~ Fin.area, data=Ra)
 abline(lm_faRa)
 
 
-glm_Ra <- glm(Total.Value ~ Fin.area + Lot.size, family=gaussian, data=Ra)
+glm_Ra <- glm(Total.Value ~ Fin.area + Lot.size + Beds + Baths, family=gaussian, data=Ra)
 summary(glm_Ra)
 plot(allEffects(glm_Ra))
 
@@ -62,7 +62,7 @@ lm_faCp <- lm(Total.Value ~ Fin.area, data=Cp)
 summary(lm_faCp)
 plot(allEffects(lm_faCp))
 
-glm_Cp <- glm(Total.Value ~ Fin.area + Lot.size, family=gaussian, data=Cp)
+glm_Cp <- glm(Total.Value ~ Fin.area + Lot.size + Beds + Baths, family=gaussian, data=Cp)
 summary(glm_Cp)
 plot(allEffects(glm_Cp))
 
