@@ -35,12 +35,13 @@ if sys.platform == 'darwin':
     matplotlib.use('tkagg')
 
 
-def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, path_to_aux=None, aux_hdr_key=None, addr_key=None):
+def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None,
+                                     path_to_aux=None, aux_hdr_key=None, addr_key=None):
     """First line with hdr_key defines the number of fields to be imported cleanly"""
     (path, base_file) = os.path.split(path_to_data)
     basename = base_file.split('.')[0]
     csv_file = basename + '_clean.csv'
-    csv_aux_file = basename + '_aux.csv'
+    csv_aux_file = basename + '_aux_clean.csv'
 
     # aux file Header
     have_header_str = None
@@ -98,16 +99,16 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, path_to_au
     with (open(path_to_data, "r", encoding='cp437') as input_file):  # reads all characters even bad ones
         with open(csv_file, "a") as output:
             for line in input_file:
-                if line.__contains__(',') and not line.__contains__('Config:'):
+                if line.__contains__(',') and not line.__contains__(hdr_key):
                     if num_lines > 0:
-                        line = mash_FY24FORDAVIDGUTZ(line)
-                    if line.count(",") == num_fields and line.count(";") == 0 and \
-                            re.search(r'[^a-zA-Z0-9+-_.:, ]', line[:-1]) is None:
-                        output.write(line)
-                        num_lines += 1
-                    else:
-                        print('discarding: ', line)
-                        num_skips += 1
+                        clean_line = mash_FY24FORDAVIDGUTZ(line)
+                        if clean_line.count(",") == num_fields and clean_line.count(";") == 0 and \
+                                re.search(r'[^a-zA-Z0-9+-_.:, ]', clean_line[:-1]) is None:
+                            output.write(clean_line)
+                            num_lines += 1
+                        else:
+                            print('discarding: ', line)
+                            num_skips += 1
     if not num_lines:
         csv_file = None
         print("I(write_clean_file): no data to write")
@@ -134,7 +135,7 @@ def main():
     data_file = './FY24FORDAVIDGUTZ.csv'
     aux_file = './FY24REPORTFORDAVIDGUTZ.csv'
     data_file_clean, data_aux_file_clean = \
-        write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Wenham', path_to_aux=aux_file,
+        write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Header', path_to_aux=aux_file,
                                          aux_hdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
     # blob = np.genfromtxt(data_file_clean, delimiter=',', names=True).view(np.recarray)
     blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', names=True).view(np.recarray)
