@@ -68,7 +68,7 @@ def write_clean_file(path_to_data=None, hdr_key=None, path_to_aux=None, auxhdr_k
                 if line.__contains__(addr_key):
                     if line.count(";") == num_fields and \
                             re.search(r'[^a-zA-Z0-9+-_.:, ]', line[:-1]) is None:
-                        output.write(line)
+                        output.write(line.replace(addr_key, ''))
                         num_lines += 1
                     else:
                         print('discarding: ', line)
