@@ -85,18 +85,20 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
             try:
                 for line in input_file:
                     if line.__contains__(hdr_key):
-                        hdr_fields = line.split(',')
+                        hdr_fields = line.strip().split(',')
                         for hdr in hdr_fields:
-                            if hdr != hdr_key:
+                            if hdr != hdr_key and hdr != '':
                                 num_fields += 1
+                                print('hdr=', hdr + ';')
                                 output.write(hdr + ';')
+                        output.write("\n")
+                        break
             except IOError:
                 print("filter_csv.py:", line)  # last line
 
     # Data
     num_lines = 0
     num_skips = 0
-    length = num_fields
     with (open(path_to_data, "r", encoding='cp437') as input_file):  # reads all characters even bad ones
         with open(csv_file, "a") as output:
             for line in input_file:
@@ -112,7 +114,7 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
         csv_file = None
         print("I(write_clean_file): no data to write")
     else:
-        print("Wrote(write_clean_file):", csv_file, num_lines, "lines", num_skips, "skips", length, "fields")
+        print("Wrote(write_clean_file):", csv_file, num_lines, "lines", num_skips, "skips", num_fields, "fields")
     return csv_file, csv_aux_file
 
 
