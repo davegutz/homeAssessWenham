@@ -17,7 +17,7 @@
 of the csv data file.
 """
 
-import numpy as np
+# import numpy as np
 # import matplotlib.pyplot as plt
 # below suppresses runtime error display******************
 # import os
@@ -89,7 +89,6 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
                         for hdr in hdr_fields:
                             if hdr != hdr_key and hdr != '':
                                 num_fields += 1
-                                print('hdr=', hdr + ';')
                                 output.write(hdr + ';')
                         output.write("\n")
                         break
@@ -137,11 +136,11 @@ def mash_FY24FORDAVIDGUTZ(inp):
     header = 'ParcelID,Location,RM,BD,BA,3/4BA,HB,FP,Owned,NBC,Imp,Floor,Loc,Grade,Built,Price,Date,Area,Value,% Change,End of Report,'
     header_fields = header.split(',')
     grade_field = header_fields.index('Grade')
-    built_field = header_fields.index('Built')
+    # built_field = header_fields.index('Built')
     price_field = header_fields.index('Built')
-    date_field = header_fields.index('Date')
-    area_field = header_fields.index('Area')
-    value_field = header_fields.index('Value')
+    # date_field = header_fields.index('Date')
+    # area_field = header_fields.index('Area')
+    # value_field = header_fields.index('Value')
 
     # Fields before price
     inp = re.sub(' +', ' ', inp)  # remove extra spaces
@@ -167,8 +166,8 @@ def mash_FY24FORDAVIDGUTZ(inp):
         inp_date_field = i + num_price
     price = 0
     multiplier = 1
-    for l in range(num_price):
-        price += int(field[inp_date_field - l - 1]) * multiplier
+    for ll in range(num_price):
+        price += int(field[inp_date_field - ll - 1]) * multiplier
         multiplier *= 1000
     out += str(price) + ';'
     j += 1
@@ -186,7 +185,6 @@ def mash_FY24FORDAVIDGUTZ(inp):
     num_entry = 0
     inp_area_start = inp_date_field + 1
     num_area = 1
-    inp_value_start = None
     num_value = 0
     # find Entry field; it may be blank
     while not field[inp_entry_field] == 'Entry' and inp_entry_field < n:
@@ -197,18 +195,30 @@ def mash_FY24FORDAVIDGUTZ(inp):
         num_area = 1
         num_value = 1
     elif area_value.__len__() == 3:
-        num_area = 2
-        num_value = 1
+        num_area = 1
+        num_value = 2
     elif area_value.__len__() == 4:
         num_area = 2
         num_value = 2
-    elif area_value.__len__() == 3:
-        num_area = 3
-        num_value = 2
-    inp_value_start = inp_area_start + num_area + 1
-    out += field[inp_area_start + num_area -1] + ';'
+    elif area_value.__len__() == 5:
+        num_area = 2
+        num_value = 3
+    inp_value_start = inp_area_start + num_area
+
+    area = 0
+    multiplier = 1
+    for i in range(num_area-1,-1,-1):
+        area += multiplier * int(field[inp_area_start + i])
+        multiplier *= 1000
+    out += str(area) + ';'
     j += 1
-    out += field[inp_value_start + num_value - 1] + ';'
+
+    value = 0
+    multiplier = 1
+    for i in range(num_value-1,-1,-1):
+        value += multiplier * int(field[inp_value_start + i])
+        multiplier *= 1000
+    out += str(value) + ';'
     j += 1
 
     # % Change field
