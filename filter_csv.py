@@ -251,9 +251,33 @@ def mash_FY24FORDAVIDGUTZ(inp):
         return None
 
 
+def write_amended_file(blob, blob_aux, final_file):
+    """ writes _clean_amend"""
+    with open(final_file, "w") as out:
+        nm = blob.dtype.names
+        for i in range(nm.__len__()):
+            out.write('"' + nm[i] + '";')
+        out.write('"Type";' + '"Nhood";' + '\n')
+        count = 0
+        aux_len = blob_aux.__len__()
+        print('aux len', aux_len)
+        for i in range(blob.__len__()):
+            for j in range(aux_len):
+                if blob[i]['Location'] == blob_aux[j]['Address']:  # take first match (I know, could be erroneous)
+                    for k in range(blob[i].__len__()):
+                        out.write('"' + str(blob[i][k]) + '";')
+                    count += 1
+                    out.write('"' + blob_aux[j]['Type'] + '";' + blob_aux[j]['Nhood'] + '";\n')
+            if j > blob_aux.__len__() - 1:
+                print(blob[i]['Location'], " not found")
+        print(f"{count=}")
+
+
 def main():
     data_file = './FY24FORDAVIDGUTZ.csv'
     aux_file = './FY24REPORTFORDAVIDGUTZ.csv'
+    final_file = './wenham_fy24.csv'
+
     data_file_clean, data_aux_file_clean = \
         write_clean_file_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Header', data_key='Entry',
                                          path_to_aux=aux_file, aux_hdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
@@ -266,7 +290,7 @@ def main():
             print(blob_aux['Address'][i])
             missing += 1
     print(f"Main length {blob.__len__()} Aux length {blob_aux.__len__()} missing {missing}")
-    # write_amended_file_FY24FORDAVIDGUTZ(path_to_clean=data_file_clean, path_to_aux=data_aux_file_clean)  # writes _clean_amend
+    write_amended_file(blob, blob_aux, final_file)  # writes _clean_amend
 # import cProfile
 # if __name__ == '__main__':
 #     cProfile.run('main()')
