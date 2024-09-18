@@ -17,7 +17,7 @@
 of the csv data file.
 """
 
-# import numpy as np
+import numpy as np
 # import matplotlib.pyplot as plt
 # below suppresses runtime error display******************
 # import os
@@ -68,7 +68,7 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
             for line in input_file:
                 if line.__contains__(addr_key):
                     if line.count(";") == num_fields + 1:
-                        output.write(line.replace(addr_key, '').replace(',', ''))
+                        output.write(line.replace(addr_key, '').replace(',', '').replace('#', '').replace('\n', ";\n"))
                         num_lines += 1
                     else:
                         print('aux discarding: ', line, end='')
@@ -238,8 +238,8 @@ def main():
     data_file_clean, data_aux_file_clean = \
         write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Header', data_key='Entry',
                                          path_to_aux=aux_file, aux_hdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
-    # blob = np.genfromtxt(data_file_clean, delimiter=',', names=True).view(np.recarray)
-    # blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', names=True).view(np.recarray)
+    blob = np.genfromtxt(data_file_clean, delimiter=';', names=True).view(np.recarray)
+    blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', names=True).view(np.recarray)
 
 # import cProfile
 # if __name__ == '__main__':
