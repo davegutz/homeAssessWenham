@@ -256,8 +256,8 @@ def write_amended_file(blob, blob_aux, final_file):
     with open(final_file, "w") as out:
         nm = blob.dtype.names
         for i in range(nm.__len__()):
-            out.write('"' + nm[i] + '";')
-        out.write('"Type";' + '"Nhood";' + '\n')
+            out.write('"' + nm[i] + '",')
+        out.write('"Type",' + '"Nhood",' + '\n')
         count = 0
         aux_len = blob_aux.__len__()
         print('aux len', aux_len)
@@ -265,9 +265,9 @@ def write_amended_file(blob, blob_aux, final_file):
             for j in range(aux_len):
                 if blob[i]['Location'] == blob_aux[j]['Address']:  # take first match (I know, could be erroneous)
                     for k in range(blob[i].__len__()):
-                        out.write('"' + str(blob[i][k]) + '";')
+                        out.write('"' + str(blob[i][k]) + '",')
                     count += 1
-                    out.write('"' + blob_aux[j]['Type'] + '";' + blob_aux[j]['Nhood'] + '";\n')
+                    out.write('"' + blob_aux[j]['Type'] + '",' + blob_aux[j]['Nhood'] + '",\n')
             if j > blob_aux.__len__() - 1:
                 print(blob[i]['Location'], " not found")
         print(f"{count=}")
