@@ -71,7 +71,7 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
                         output.write(line.replace(addr_key, ''))
                         num_lines += 1
                     else:
-                        print('discarding: ', line)
+                        print('aux discarding: ', line, end='')
                         num_skips += 1
         if not num_lines:
             print("I(write_clean_file): no data to write")
@@ -107,7 +107,7 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
                         output.write(clean_line)
                         num_lines += 1
                     else:
-                        print('discarding: ', line)
+                        print('discarding: ', line, end='')
                         num_skips += 1
     if not num_lines:
         csv_file = None
