@@ -68,7 +68,26 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
             for line in input_file:
                 if line.__contains__(addr_key):
                     if line.count(";") == num_fields + 1:
-                        output.write(line.replace(addr_key, '').replace(',', '').replace('#', '').replace('\n', ";\n"))
+                        output.write(line.replace(addr_key, '').replace(',', '').replace('#', '').\
+                                     replace(' ST;', ' STREET;').replace(' DR;', ' DRIVE;').
+                                     replace(' AVE;', ' AVENUE;').replace(' RD;', ' ROAD;').
+                                     replace(' CT;', ' COURT;').replace(' CIR;', ' CIRCLE;').
+                                     replace(' LN;', ' LANE;').replace(' RD;', ' ROAD;').
+                                     replace('BRUCE LN;', 'BRUCE LANE;').\
+                                     replace('ARBOR STREET;', 'ARBOR ST;').\
+                                     replace('BURLEY STREET;', 'BURLEY ST;').\
+                                     replace('CHERRY STREET;', 'CHERRY ST;').\
+                                     replace('ESSEX STREET;', 'ESSEX ST;').\
+                                     replace('GRAPEVINE ROAD;', 'GRAPEVINE RD;').\
+                                     replace('HULL STREET;', 'HULL ST;').\
+                                     replace('MAIN STREET;', 'MAIN ST;').\
+                                     replace('MAPLE STREET;', 'MAPLE ST;').\
+                                     replace('PARSONS HILL ROAD;', 'PARSONS HILL RD;').\
+                                     replace('PINE HILL ROAD;', 'PINE HILL RD;').\
+                                     replace('PRINCEMERE LANE;', 'PRINCEMERE LN;').\
+                                     replace('WALNUT ROAD;', 'WALNUT RD;').\
+                                     replace('WM FAIRFIELD DRIVE', 'WM FAIRFIELD DR').\
+                                     replace('\n', ";\n"))
                         num_lines += 1
                     else:
                         print('aux discarding: ', line, end='')
@@ -238,9 +257,15 @@ def main():
     data_file_clean, data_aux_file_clean = \
         write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Header', data_key='Entry',
                                          path_to_aux=aux_file, aux_hdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
-    blob = np.genfromtxt(data_file_clean, delimiter=';', names=True).view(np.recarray)
-    blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', names=True).view(np.recarray)
-    x = 0
+    blob = np.genfromtxt(data_file_clean, delimiter=';', encoding='utf-8', dtype=None, names=True)
+    blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', encoding='utf-8', dtype=None, names=True)
+    missing = 0
+    for i in range(blob_aux.__len__()):
+        contains = blob['Location'].__contains__(blob_aux['Address'][i])
+        if not contains:
+            print(blob_aux['Address'][i])
+            missing += 1
+    print(f"Main length {blob.__len__()} Aux length {blob_aux.__len__()} missing {missing}")
 # import cProfile
 # if __name__ == '__main__':
 #     cProfile.run('main()')
