@@ -207,7 +207,7 @@ def mash_FY24FORDAVIDGUTZ(inp):
 
     area = 0
     multiplier = 1
-    for i in range(num_area-1,-1,-1):
+    for i in range(num_area-1, -1, -1):
         area += multiplier * int(field[inp_area_start + i])
         multiplier *= 1000
     out += str(area) + ';'
@@ -215,7 +215,7 @@ def mash_FY24FORDAVIDGUTZ(inp):
 
     value = 0
     multiplier = 1
-    for i in range(num_value-1,-1,-1):
+    for i in range(num_value-1, -1, -1):
         value += multiplier * int(field[inp_value_start + i])
         multiplier *= 1000
     out += str(value) + ';'
@@ -240,7 +240,7 @@ def main():
                                          path_to_aux=aux_file, aux_hdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
     blob = np.genfromtxt(data_file_clean, delimiter=';', names=True).view(np.recarray)
     blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', names=True).view(np.recarray)
-
+    x = 0
 # import cProfile
 # if __name__ == '__main__':
 #     cProfile.run('main()')
