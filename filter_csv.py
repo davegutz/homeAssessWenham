@@ -35,7 +35,7 @@ if sys.platform == 'darwin':
     matplotlib.use('tkagg')
 
 
-def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=None,
+def write_clean_file_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=None,
                                      path_to_aux=None, aux_hdr_key=None, addr_key=None):
     """First line with hdr_key defines the number of fields to be imported cleanly"""
     (path, base_file) = os.path.split(path_to_data)
@@ -255,7 +255,7 @@ def main():
     data_file = './FY24FORDAVIDGUTZ.csv'
     aux_file = './FY24REPORTFORDAVIDGUTZ.csv'
     data_file_clean, data_aux_file_clean = \
-        write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Header', data_key='Entry',
+        write_clean_file_FY24FORDAVIDGUTZ(path_to_data=data_file, hdr_key='Header', data_key='Entry',
                                          path_to_aux=aux_file, aux_hdr_key='Land Area;Building Value', addr_key=' -   - WENHAM, MA 01984  ')
     blob = np.genfromtxt(data_file_clean, delimiter=';', encoding='utf-8', dtype=None, names=True)
     blob_aux = np.genfromtxt(data_aux_file_clean, delimiter=';', encoding='utf-8', dtype=None, names=True)
@@ -266,6 +266,7 @@ def main():
             print(blob_aux['Address'][i])
             missing += 1
     print(f"Main length {blob.__len__()} Aux length {blob_aux.__len__()} missing {missing}")
+    # write_amended_file_FY24FORDAVIDGUTZ(path_to_clean=data_file_clean, path_to_aux=data_aux_file_clean)  # writes _clean_amend
 # import cProfile
 # if __name__ == '__main__':
 #     cProfile.run('main()')
