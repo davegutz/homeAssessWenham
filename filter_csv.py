@@ -50,11 +50,12 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
             try:
                 for line in input_file:
                     if line.__contains__(aux_hdr_key):
-                        hdr_fields = line.split(',')
+                        hdr_fields = line.strip().split(',')
                         for hdr in hdr_fields:
                             if hdr != aux_hdr_key:
                                 output.write(hdr + ';')
-                        num_fields = line.count(',') - 1  # first line with hdr_key defines number of fields
+                        num_fields = line.count(';') - 1  # first line with hdr_key defines number of fields
+                        output.write('\n')
                         break
             except IOError:
                 print("filter_csv.py:", line)  # last line
@@ -66,9 +67,8 @@ def write_clean_fil_FY24FORDAVIDGUTZ(path_to_data=None, hdr_key=None, data_key=N
         with open(csv_aux_file, "a") as output:
             for line in input_file:
                 if line.__contains__(addr_key):
-                    if line.count(";") == num_fields and \
-                            re.search(r'[^a-zA-Z0-9+-_.:, ]', line[:-1]) is None:
-                        output.write(line.replace(addr_key, ''))
+                    if line.count(";") == num_fields + 1:
+                        output.write(line.replace(addr_key, '').replace(',', ''))
                         num_lines += 1
                     else:
                         print('aux discarding: ', line, end='')
