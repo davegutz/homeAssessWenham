@@ -48,7 +48,7 @@ lm_faD <- lm(Value ~ Area, data=D)
 summary(lm_faD)
 plot(allEffects(lm_faD))
 
-glm_faD <- glm(Value ~ Area + BD + Baths + Type, family=gaussian, data=D)
+glm_faD <- glm(Value ~ Area + BD + BA + Type, family=gaussian, data=D)
 summary(glm_faD)
 plot(allEffects(glm_faD))
 
@@ -63,8 +63,7 @@ plot(allEffects(lm_faRa))
 plot(Value ~ Area, data=Ra)
 abline(lm_faRa)
 
-
-glm_Ra <- glm(Value ~ Area + BD + Baths, family=gaussian, data=Ra)
+glm_Ra <- glm(Value ~ Area + BD + BA, family=gaussian, data=Ra)
 summary(glm_Ra)
 plot(allEffects(glm_Ra))
 
@@ -76,7 +75,7 @@ lm_faCp <- lm(Value ~ Area, data=Cp)
 summary(lm_faCp)
 plot(allEffects(lm_faCp))
 
-glm_Cp <- glm(Value ~ Area + BD + Baths, family=gaussian, data=Cp)
+glm_Cp <- glm(Value ~ Area + BD + BA, family=gaussian, data=Cp)
 summary(glm_Cp)
 plot(allEffects(glm_Cp))
 
@@ -85,7 +84,7 @@ lm_faCo <- lm(Value ~ Area, data=Co)
 summary(lm_faCo)
 plot(allEffects(lm_faCo))
 
-glm_Co <- glm(Value ~ Area + BD + Baths, family=gaussian, data=Co)
+glm_Co <- glm(Value ~ Area + BD + BA, family=gaussian, data=Co)
 summary(glm_Co)
 plot(allEffects(glm_Co))
 
@@ -94,9 +93,30 @@ lm_faSl <- lm(Value ~ Area, data=Sl)
 summary(lm_faSl)
 plot(allEffects(lm_faSl))
 
-glm_Sl <- glm(Value ~ Area + BD + Baths, family=gaussian, data=Sl)
+glm_Sl <- glm(Value ~ Area + BD + BA, family=gaussian, data=Sl)
 summary(glm_Sl)
 plot(allEffects(glm_Sl))
+
+######### BUNGALOW
+lm_faBu <- lm(Value ~ Area, data=Bu)
+summary(lm_faBu)
+plot(allEffects(lm_faBu))
+
+glm_Bu <- glm(Value ~ Area + BD + BA, family=gaussian, data=Bu)
+summary(glm_Bu)
+plot(allEffects(glm_Bu))
+
+######### 
+
+#Aq <- D[D$Type=='ANTIQUE', ]
+#Cv <- D[D$Type=='CONVENTONL', ]
+#Se <- D[D$Type=='SPLIT ENT', ]
+#Os <- D[D$Type=='OLD STYLE', ]
+#Cn <- D[D$Type=='CONDO', ]
+#Cy <- D[D$Type=='CONTEMPORY', ]
+#Es <- D[D$Type=='ESTATE', ]
+
+
 
 #############Summarize
 
@@ -111,4 +131,6 @@ lines(Co$Area, Co$Value, type="p", pch=3, col="green")
 abline(lm_faCo, col="green")
 lines(Sl$Area, Sl$Value, type="p", pch="S", col="black")
 abline(lm_faSl, col="black")
-legend("topleft", legend=c("Ranch", "Cape", "Colonial", "Split Level"), col=c("red", "blue", "green", "black"), lty=1)
+lines(Bu$Area, Bu$Value, type="p", pch="4", col="pink")
+abline(lm_faBu, col="pink")
+legend("topleft", legend=c("Ranch", "Cape", "Colonial", "Split Level", "Bungalow"), col=c("red", "blue", "green", "black", "pink"), lty=1)
