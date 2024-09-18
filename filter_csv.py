@@ -267,7 +267,10 @@ def write_amended_file(blob, blob_aux, final_file):
                     for k in range(blob[i].__len__()):
                         out.write('"' + str(blob[i][k]) + '",')
                     count += 1
-                    out.write('"' + blob_aux[j]['Type'] + '",' + blob_aux[j]['Nhood'] + '",\n')
+                    nhood = blob_aux[j]['Nhood']
+                    if nhood == 'TB  ' or nhood == 'WP  ' or nhood == 'FC  ':
+                        nhood = 0
+                    out.write('"' + blob_aux[j]['Type'] + '","' + str(nhood) + '",\n')
             if j > blob_aux.__len__() - 1:
                 print(blob[i]['Location'], " not found")
         print(f"{count=}")
