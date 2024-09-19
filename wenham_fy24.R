@@ -14,6 +14,7 @@ library(zoo) # rollmean
  
 # Import Data
 D <- read.csv("wenham_fy24.csv")
+D <- subset(D, Grade != -999)
 
 # Separate types
 Ra <- D[D$Type=='RANCH', ]
@@ -48,13 +49,9 @@ lm_faD <- lm(Value ~ Area, data=D)
 summary(lm_faD)
 plot(allEffects(lm_faD))
 
-glm_faD <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=D)
+glm_faD <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=D)
 summary(glm_faD)
 plot(allEffects(glm_faD))
-
-lm_plD <- lm(Value ~ Plot, data=D)
-summary(lm_plD)
-plot(allEffects(lm_plD))
 
 
 #newdata=data.frame(nickel=c(80, 90, 99, 100, 101, 110))
@@ -68,7 +65,7 @@ plot(allEffects(lm_faRa))
 plot(Value ~ Area, data=Ra)
 abline(lm_faRa)
 
-glm_Ra <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=Ra)
+glm_Ra <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=Ra)
 summary(glm_Ra)
 plot(allEffects(glm_Ra))
 
@@ -80,7 +77,7 @@ lm_faCp <- lm(Value ~ Area, data=Cp)
 summary(lm_faCp)
 plot(allEffects(lm_faCp))
 
-glm_Cp <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=Cp)
+glm_Cp <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=Cp)
 summary(glm_Cp)
 plot(allEffects(glm_Cp))
 
@@ -89,7 +86,7 @@ lm_faCo <- lm(Value ~ Area, data=Co)
 summary(lm_faCo)
 plot(allEffects(lm_faCo))
 
-glm_Co <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=Co)
+glm_Co <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=Co)
 summary(glm_Co)
 plot(allEffects(glm_Co))
 
@@ -98,7 +95,7 @@ lm_faSl <- lm(Value ~ Area, data=Sl)
 summary(lm_faSl)
 plot(allEffects(lm_faSl))
 
-glm_Sl <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=Sl)
+glm_Sl <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=Sl)
 summary(glm_Sl)
 plot(allEffects(glm_Sl))
 
@@ -107,7 +104,7 @@ lm_faBu <- lm(Value ~ Area, data=Bu)
 summary(lm_faBu)
 plot(allEffects(lm_faBu))
 
-glm_Bu <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=Bu)
+glm_Bu <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=Bu)
 summary(glm_Bu)
 plot(allEffects(glm_Bu))
 
@@ -116,7 +113,7 @@ lm_faSe <- lm(Value ~ Area, data=Se)
 summary(lm_faSe)
 plot(allEffects(lm_faSe))
 
-glm_Se <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=Se)
+glm_Se <- glm(Value ~ Area + BD + BA + Plot + Grade, family=gaussian, data=Se)
 summary(glm_Se)
 plot(allEffects(glm_Se))
 
