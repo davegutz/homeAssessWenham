@@ -48,9 +48,14 @@ lm_faD <- lm(Value ~ Area, data=D)
 summary(lm_faD)
 plot(allEffects(lm_faD))
 
-glm_faD <- glm(Value ~ Area + BD + BA + Plot + Type + Plot, family=gaussian, data=D)
+glm_faD <- glm(Value ~ Area + BD + BA + Plot, family=gaussian, data=D)
 summary(glm_faD)
 plot(allEffects(glm_faD))
+
+lm_plD <- lm(Value ~ Plot, data=D)
+summary(lm_plD)
+plot(allEffects(lm_plD))
+
 
 #newdata=data.frame(nickel=c(80, 90, 99, 100, 101, 110))
 #predict(glm_nickel, newdata, type="response") # odds of getting migraine given levels of nickel intake (ug)
