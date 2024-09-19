@@ -257,7 +257,7 @@ def write_amended_file(blob, blob_aux, final_file):
         nm = blob.dtype.names
         for i in range(nm.__len__()):
             out.write('"' + nm[i] + '",')
-        out.write('"Type",' + '"Nhood",' + '\n')
+        out.write('"Type",' + '"Nhood",' + '"Plot",\n')
         count = 0
         aux_len = blob_aux.__len__()
         print('aux len', aux_len)
@@ -270,7 +270,7 @@ def write_amended_file(blob, blob_aux, final_file):
                     nhood = blob_aux[j]['Nhood']
                     if nhood == 'TB  ' or nhood == 'WP  ' or nhood == 'FC  ':
                         nhood = 0
-                    out.write('"' + blob_aux[j]['Type'] + '","' + str(nhood) + '",\n')
+                    out.write('"' + blob_aux[j]['Type'] + '","' + str(nhood) + '","' + str(blob_aux[j]['Land_Area']) + '",\n')
             if j > blob_aux.__len__() - 1:
                 print(blob[i]['Location'], " not found")
         print(f"{count=}")
