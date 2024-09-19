@@ -106,8 +106,17 @@ glm_Bu <- glm(Value ~ Area + BD + BA, family=gaussian, data=Bu)
 summary(glm_Bu)
 plot(allEffects(glm_Bu))
 
-######### 
+######### BUNGALOW
+lm_faSe <- lm(Value ~ Area, data=Se)
+summary(lm_faSe)
+plot(allEffects(lm_faSe))
 
+glm_Se <- glm(Value ~ Area + BD + BA, family=gaussian, data=Se)
+summary(glm_Se)
+plot(allEffects(glm_Se))
+
+
+######### 
 #Aq <- D[D$Type=='ANTIQUE', ]
 #Cv <- D[D$Type=='CONVENTONL', ]
 #Se <- D[D$Type=='SPLIT ENT', ]
@@ -120,17 +129,34 @@ plot(allEffects(glm_Bu))
 
 #############Summarize
 
-# Create an empty plot
-plot(Ra$Area, Ra$Value, type="n", xlim=c(500, 5500), ylim=c(200000, 1200000), 
+##### Ranch v Cape
+plot(Ra$Area, Ra$Value, type="n", xlim=c(500, 3500), ylim=c(200000, 1200000), 
      xlab="Finished Area, sqft", ylab="Total Assesed Value, $", main="Wenham Neighborhood 2000")
 lines(Ra$Area, Ra$Value, type="p", pch=1, col="red")
 abline(lm_faRa, col="red")
 lines(Cp$Area, Cp$Value, type="p", pch=2, col="blue")
 abline(lm_faCp, col="blue")
-lines(Co$Area, Co$Value, type="p", pch=3, col="green")
+legend("topleft", legend=c("Ranch", "Cape"),
+       col=c("red", "blue"), lty=1)
+
+##### Ranch v Split Entry
+plot(Ra$Area, Ra$Value, type="n", xlim=c(500, 3500), ylim=c(200000, 1200000), 
+     xlab="Finished Area, sqft", ylab="Total Assesed Value, $", main="Wenham Neighborhood 2000")
+lines(Ra$Area, Ra$Value, type="p", pch=1, col="red")
+abline(lm_faRa, col="red")
+lines(Se$Area, Se$Value, type="p", pch=5, col="orange")
+abline(lm_faSe, col="orange")
+legend("topleft", legend=c("Ranch", "Split Entry"),
+       col=c("red", "orange"), lty=1)
+
+# Create an empty plot
+plot(Ra$Area, Ra$Value, type="n", xlim=c(500, 3500), ylim=c(200000, 1200000), 
+     xlab="Finished Area, sqft", ylab="Total Assesed Value, $", main="Wenham Neighborhood 2000")
+abline(lm_faRa, col="red")
+abline(lm_faCp, col="blue")
 abline(lm_faCo, col="green")
-lines(Sl$Area, Sl$Value, type="p", pch="S", col="black")
 abline(lm_faSl, col="black")
-lines(Bu$Area, Bu$Value, type="p", pch="4", col="pink")
 abline(lm_faBu, col="pink")
-legend("topleft", legend=c("Ranch", "Cape", "Colonial", "Split Level", "Bungalow"), col=c("red", "blue", "green", "black", "pink"), lty=1)
+abline(lm_faSe, col="orange")
+legend("topleft", legend=c("Ranch", "Cape", "Colonial", "Split Level", "Bungalow", "Split Entry"),
+       col=c("red", "blue", "green", "black", "pink", "orange"), lty=1)
