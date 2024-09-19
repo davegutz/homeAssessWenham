@@ -106,7 +106,7 @@ glm_Bu <- glm(Value ~ Area + BD + BA, family=gaussian, data=Bu)
 summary(glm_Bu)
 plot(allEffects(glm_Bu))
 
-######### BUNGALOW
+######### Split Entry
 lm_faSe <- lm(Value ~ Area, data=Se)
 summary(lm_faSe)
 plot(allEffects(lm_faSe))
